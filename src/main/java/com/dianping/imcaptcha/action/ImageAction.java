@@ -37,12 +37,13 @@ public class ImageAction extends BaseTokenAction {
 	public String execute() throws Exception {
 		if (StringUtils.isBlank(getToken())) {
 			code = 403;
-			return SUCCESS;
+			return ERROR;
 		}
 		InputStream image = imageService.getImage(getToken());
-		ServletOutputStream outputStream = ServletActionContext.getResponse().getOutputStream();
+		HttpServletResponse response = ServletActionContext.getResponse();
+		ServletOutputStream outputStream = response.getOutputStream();
 		IOUtils.copy(image, outputStream);
-		return SUCCESS;
+		return null;
 	}
 
 	/*

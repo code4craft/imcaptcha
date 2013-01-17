@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 public class ImageStorageService implements InitializingBean {
 	private String rawPath = "E:\\imcaptcha\\raw";
 	private String modifiedPath = "E:\\imcaptcha\\modified";
-	private String cachePath = "/Users/cairne/imcaptcha/cache/";
 	private List<File> rawFiles = new ArrayList<File>();
 	private List<File> modifiedFiles = new ArrayList<File>();
 	private AtomicInteger atomicInteger = new AtomicInteger();
@@ -37,7 +36,9 @@ public class ImageStorageService implements InitializingBean {
 			index = 0;
 		}
 		try {
-			return ImageIO.read(rawFiles.get(index));
+			File rawFile = rawFiles.get(index);
+			logger.info("get image " + rawFile);
+			return ImageIO.read(rawFile);
 		} catch (IOException e) {
 			logger.warn("read file error!");
 		}

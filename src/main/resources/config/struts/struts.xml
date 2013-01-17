@@ -21,7 +21,7 @@
        			<result name="success">/WEB-INF/index.jsp</result>
        		</action>
        		<action name="image" class="com.dianping.imcaptcha.action.ImageAction">
-       			<result name="success"></result>
+       			<result name="error" type="json"></result>
        		</action>
        </package>
 </struts>
