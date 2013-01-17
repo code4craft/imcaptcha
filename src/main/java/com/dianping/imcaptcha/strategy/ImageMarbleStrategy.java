@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.dianping.imcaptcha.service.ImageStorageService;
-import com.jhlabs.image.PinchFilter;
 
 /**
  * @author yihua.huang@dianping.com
@@ -41,7 +40,7 @@ public class ImageMarbleStrategy implements ImageProcessStrategy {
 	 */
 	public ImageAnswerPair getImage() {
 		int answer = 0;
-		PinchFilter filter = new PinchFilter();
+		WaveFilter filter = new WaveFilter();
 		BufferedImage bufferedImage = imageStorageService.getRaw();
 		filter.filter(bufferedImage, bufferedImage);
 		ByteArrayOutputStream bs = new ByteArrayOutputStream();
@@ -50,7 +49,6 @@ public class ImageMarbleStrategy implements ImageProcessStrategy {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new ImageAnswerPair(new ByteArrayInputStream(bs.toByteArray()),
-				answer);
+		return new ImageAnswerPair(new ByteArrayInputStream(bs.toByteArray()), answer);
 	}
 }

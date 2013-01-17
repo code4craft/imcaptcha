@@ -19,7 +19,7 @@ public class AnswerContainer {
 		map.put(token, answer);
 	}
 
-	public int get(String token) {
+	public Integer get(String token) {
 		return map.get(token);
 	}
 

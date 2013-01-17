@@ -19,20 +19,42 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ImageStorageService implements InitializingBean {
-	private String rawPath = "/Users/cairne/imcaptcha/raw/";
+	private String rawPath = "E:\\imcaptcha\\raw";
+	private String modifiedPath = "E:\\imcaptcha\\modified";
 	private String cachePath = "/Users/cairne/imcaptcha/cache/";
-	private List<File> files = new ArrayList<File>();
+	private List<File> rawFiles = new ArrayList<File>();
+	private List<File> modifiedFiles = new ArrayList<File>();
 	private AtomicInteger atomicInteger = new AtomicInteger();
 	private Logger logger = Logger.getLogger(getClass());
 
 	public BufferedImage getRaw() {
 		int index = atomicInteger.incrementAndGet();
-		if (index >= files.size()) {
+		if (rawFiles.size() <= 0) {
+			return null;
+		}
+		if (index >= rawFiles.size()) {
 			atomicInteger.set(0);
 			index = 0;
 		}
 		try {
-			return ImageIO.read(files.get(index));
+			return ImageIO.read(rawFiles.get(index));
+		} catch (IOException e) {
+			logger.warn("read file error!");
+		}
+		return null;
+	}
+
+	public BufferedImage getModified() {
+		int index = atomicInteger.incrementAndGet();
+		if (modifiedFiles.size() <= 0) {
+			return null;
+		}
+		if (index >= modifiedFiles.size()) {
+			atomicInteger.set(0);
+			index = 0;
+		}
+		try {
+			return ImageIO.read(modifiedFiles.get(index));
 		} catch (IOException e) {
 			logger.warn("read file error!");
 		}
@@ -46,16 +68,18 @@ public class ImageStorageService implements InitializingBean {
 	 * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	public void afterPropertiesSet() throws Exception {
-		File file = new File(rawPath);
-		loadImageFiles(file);
+		File rawFile = new File(rawPath);
+		File modifiedFile = new File(modifiedPath);
+		loadImageFiles(rawFile, rawFiles);
+		loadImageFiles(modifiedFile, modifiedFiles);
 	}
 
-	private final void loadImageFiles(File dir) {
+	private final void loadImageFiles(File dir, List<File> files) {
 		File[] listFiles = dir.listFiles();
 		if (listFiles != null) {
 			for (File subFile : listFiles) {
 				if (subFile.isDirectory()) {
-					loadImageFiles(subFile);
+					loadImageFiles(subFile, files);
 				} else {
 					files.add(subFile);
 				}

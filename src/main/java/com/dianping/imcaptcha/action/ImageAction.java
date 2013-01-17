@@ -40,8 +40,7 @@ public class ImageAction extends BaseTokenAction {
 			return SUCCESS;
 		}
 		InputStream image = imageService.getImage(getToken());
-		ServletOutputStream outputStream = ServletActionContext.getResponse()
-				.getOutputStream();
+		ServletOutputStream outputStream = ServletActionContext.getResponse().getOutputStream();
 		IOUtils.copy(image, outputStream);
 		return SUCCESS;
 	}
