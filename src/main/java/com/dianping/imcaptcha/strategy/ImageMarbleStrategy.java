@@ -19,6 +19,10 @@ import com.dianping.imcaptcha.service.ImageStorageService;
 @Component
 public class ImageMarbleStrategy implements ImageProcessStrategy {
 
+	/**
+	 * 
+	 */
+	private static final int THRESHOLD = 5;
 	@Autowired
 	private ImageStorageService imageStorageService;
 
@@ -29,8 +33,7 @@ public class ImageMarbleStrategy implements ImageProcessStrategy {
 	 * int)
 	 */
 	public boolean isValid(int userAnswer, int standardAnswer) {
-		// TODO Auto-generated method stub
-		return false;
+		return Math.abs(userAnswer - standardAnswer) < THRESHOLD;
 	}
 
 	/*
