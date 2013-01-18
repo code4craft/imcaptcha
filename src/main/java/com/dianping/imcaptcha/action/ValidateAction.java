@@ -42,10 +42,13 @@ public class ValidateAction extends BaseTokenAction {
 		return code;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * @param answer
 	 *            the answer to set
 	 */
+=======
+>>>>>>> c9c09a0bf039ee1553646df25e1d9b57defa9497
 	public void setAnswer(int answer) {
 		this.answer = answer;
 	}
