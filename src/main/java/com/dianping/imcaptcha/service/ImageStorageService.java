@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ImageStorageService implements InitializingBean {
-	private String rawPath = "E:\\imcaptcha\\raw";
-	private String modifiedPath = "E:\\imcaptcha\\modified";
+	private String rawPath = "/Users/cairne/imcaptcha/raw";
+	private String modifiedPath = "/Users/cairne/imcaptcha/modified";
 	private List<File> rawFiles = new ArrayList<File>();
 	private List<File> modifiedFiles = new ArrayList<File>();
 	private AtomicInteger atomicInteger = new AtomicInteger();
@@ -82,7 +82,10 @@ public class ImageStorageService implements InitializingBean {
 				if (subFile.isDirectory()) {
 					loadImageFiles(subFile, files);
 				} else {
-					files.add(subFile);
+					if (subFile.getName() != null
+							&& !subFile.getName().contains(".DS_Store")) {
+						files.add(subFile);
+					}
 				}
 			}
 		}

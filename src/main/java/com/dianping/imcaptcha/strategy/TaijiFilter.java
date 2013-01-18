@@ -18,9 +18,6 @@ package com.dianping.imcaptcha.strategy;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
-
-import org.springframework.stereotype.Component;
 
 import com.jhlabs.image.ImageMath;
 import com.jhlabs.image.TransformFilter;
@@ -31,38 +28,22 @@ import com.jhlabs.image.TransformFilter;
  * @author yihua.huang
  * 
  */
-@Component
-public class WaveFilter extends TransformFilter {
-
-	private float factor = 50;
-
-	private float radius = (float) (6000f / Math.PI);
+public class TaijiFilter extends TransformFilter implements ArgumentedFilter {
 
 	/**
 	 * 
 	 */
-	public WaveFilter() {
+	public TaijiFilter() {
 		super();
 	}
 
-	/**
-	 * @param factor
-	 * @param radius
-	 */
-	public WaveFilter(float factor, float radius) {
-		super();
-		this.factor = factor;
-		this.radius = radius;
-	}
-
-	public BufferedImage filter(BufferedImage src, BufferedImage dst) {
+	@Override
+	public BufferedImage filterArgu(BufferedImage src, BufferedImage dst,
+			float factor) {
 		int width = src.getWidth();
 		int height = src.getHeight();
-		radius = (float) (height / Math.PI / 2);
-		factor = (float) (width * 0.3);
-		System.out.println(radius);
-		int type = src.getType();
-		WritableRaster srcRaster = src.getRaster();
+		// int type = src.getType();
+		// WritableRaster srcRaster = src.getRaster();
 
 		originalSpace = new Rectangle(0, 0, width, height);
 		transformedSpace = new Rectangle(0, 0, width, height);
@@ -75,7 +56,7 @@ public class WaveFilter extends TransformFilter {
 							transformedSpace.width, transformedSpace.height),
 					dstCM.isAlphaPremultiplied(), null);
 		}
-		WritableRaster dstRaster = dst.getRaster();
+		// WritableRaster dstRaster = dst.getRaster();
 
 		int[] inPixels = getRGB(src, 0, 0, width, height, null);
 
@@ -90,7 +71,7 @@ public class WaveFilter extends TransformFilter {
 		int outWidth = transformedSpace.width;
 		int outHeight = transformedSpace.height;
 		int outX, outY;
-		int index = 0;
+		// int index = 0;
 		int[] outPixels = new int[outWidth];
 
 		outX = transformedSpace.x;
@@ -99,7 +80,7 @@ public class WaveFilter extends TransformFilter {
 
 		for (int y = 0; y < outHeight; y++) {
 			for (int x = 0; x < outWidth; x++) {
-				transformInverse(outX + x, outY + y, out);
+				transformInverse(outX + x, outY + y, out, width, height, factor);
 				int srcX = (int) Math.floor(out[0]);
 				int srcY = (int) Math.floor(out[1]);
 				float xWeight = out[0] - srcX;
@@ -147,15 +128,50 @@ public class WaveFilter extends TransformFilter {
 		return pixels[y * width + x];
 	}
 
-	/**
-	 * (non-Jsdoc)
+	protected void transformInverse(int x, int y, float[] out, int width,
+			int height, float factor) {
+		float cycle = (float) Math.min(width, height);
+		float centerX = width / 2.0f;
+		float centerY = height / 2.0f;
+		float xCentered = x - centerX;
+		float yCentered = y - centerY;
+		double radius = Math.sqrt((double) (xCentered * xCentered + yCentered
+				* yCentered));
+		if (radius == 0) {
+			return;
+		}
+		if (radius > centerX || radius > centerY) {
+			out[0] = x;
+			out[1] = y;
+			return;
+		}
+		transformInverseCentered(xCentered, yCentered, out, radius, cycle,
+				factor);
+		out[0] += centerX;
+		out[1] += centerY;
+	}
+
+	protected void transformInverseCentered(float x, float y, float[] out,
+			double radius, float cycle, float factor) {
+		double offset = Math.sin(radius / cycle * Math.PI * 2) * factor;
+		double angleOld = Math.acos(x / radius);
+		if (y < 0) {
+			angleOld = 2 * Math.PI - angleOld;
+		}
+		double angleNew = angleOld + offset * 1.0 / radius;
+
+		out[0] = (float) (Math.cos(angleNew) * radius);
+		out[1] = (float) (Math.sin(angleNew) * radius);
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * 
 	 * @see com.jhlabs.image.TransformFilter#transformInverse(int, int, float[])
 	 */
 	@Override
 	protected void transformInverse(int x, int y, float[] out) {
-		out[0] = (float) (x - factor * Math.sin(y / radius));
-		out[1] = y;
-	}
+		// TODO Auto-generated method stub
 
+	}
 }

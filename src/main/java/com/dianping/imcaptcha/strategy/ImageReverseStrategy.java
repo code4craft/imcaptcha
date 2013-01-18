@@ -54,7 +54,8 @@ public class ImageReverseStrategy implements ImageProcessStrategy {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new ImageAnswerPair(new ByteArrayInputStream(bs.toByteArray()), answer);
+		return new ImageAnswerPair(new ByteArrayInputStream(bs.toByteArray()),
+				answer);
 	}
 
 	/**

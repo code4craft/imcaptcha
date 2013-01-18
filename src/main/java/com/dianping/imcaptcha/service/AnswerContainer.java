@@ -23,4 +23,8 @@ public class AnswerContainer {
 		return map.get(token);
 	}
 
+	public void clearAnswer(String token) {
+		map.remove(token);
+	}
+
 }
