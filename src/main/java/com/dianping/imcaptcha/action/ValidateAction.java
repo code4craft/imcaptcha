@@ -34,7 +34,7 @@ public class ValidateAction extends BaseTokenAction {
 			code = 403;
 			return SUCCESS;
 		}
-		code = answerService.isValid(getToken(), answer) ? 200 : 500;
+		code = answerService.isValid(getToken(), answer) ? 200 : 400;
 		return SUCCESS;
 	}
 

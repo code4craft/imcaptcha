@@ -172,6 +172,6 @@ token为空返回json {"code":403}</p>
 
 <p>url:<a href="/validate?answer=10&token=xxx">/validate?answer=10&token=xxx</a>
 token为空返回json {"code":403}</p>
-<p>成功返回200，失败返回500</p>
+<p>成功返回200，失败返回400</p>
 </body>
 </html>
