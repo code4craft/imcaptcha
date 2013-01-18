@@ -165,13 +165,13 @@ pre code {
 
 <h3>1.获取图片：</h3>
 
-<p>url:<a href="/image">/image</a>
-需要携带cookie: t=xxxx，没有返回json {"code":403}</p>
+<p>url:<a href="/image?token=xxx">/image?token=xxx</a>
+token为空返回json {"code":403}</p>
 
 <h3>2.验证答案：</h3>
 
-<p>url:<a href="/validate?answer=10">/validate?answer=10</a>
-需要携带cookie: t=xxxx，没有返回json {"code":403}</p>
+<p>url:<a href="/validate?answer=10&token=xxx">/validate?answer=10&token=xxx</a>
+token为空返回json {"code":403}</p>
 <p>成功返回200，失败返回500</p>
 </body>
 </html>

@@ -17,7 +17,7 @@ import com.dianping.imcaptcha.service.ImageStorageService;
  * @date 2013-1-17
  */
 @Component
-public class ImageMarbleStrategy implements ImageProcessStrategy {
+public class ImageDistortStrategy implements ImageProcessStrategy {
 
 	/**
 	 * 
