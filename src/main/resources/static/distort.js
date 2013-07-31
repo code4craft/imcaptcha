@@ -1,40 +1,91 @@
-addEventListener('load', function() {
-    var cnv = document.getElementById('q');
-    var ctx = cnv.getContext('2d');
-    // характеризует сдвиг графика по оси Oy. Чем больше a, тем выше поднимается график
-    var a = cnv.height / 2;
-    // характеризует растяжение графика по оси Oy. Чем больше увеличивается b, тем сильнее возрастает амплитуда колебаний
-    var b = 10;
-    // характеризует растяжение графика по оси Ox. При увеличении c частота колебаний повышается
-    var c = .05;
-    // характеризует сдвиг графика по оси Ox. При увеличении d график двигается в положительном направлении оси абсцисс
-    var d = 0;
-
-    for (var i = 0; i < cnv.width; ++i) {
-        ctx.fillRect(i, ( a + b * Math.sin(c * i + d) ), 1, 1);
+function transformInverse(x, y, out, width, height, factor) {
+    var cycle = Math.min(width * 1.0, height * 1.0);
+    var centerX = width / 2.0
+    var centerY = height / 2.0;
+    var xCentered = Math.round(x - centerX);
+    var yCentered = Math.round(y - centerY);
+    var radius = Math.sqrt((xCentered * xCentered + yCentered * yCentered));
+    if (radius == 0) {
+        return;
     }
-
-    var cnv1 = document.getElementById('e');
-    var ctx1 = cnv1.getContext('2d');
-    ctx1.font = 'bold 30px Calibri';
-    ctx1.fillText('Hello', 10, 30);
-    var imd = ctx1.getImageData(0, 0, cnv1.width, cnv1.height);
-
-    var cnv2 = document.getElementById('r');
-    var ctx2 = cnv2.getContext('2d');
-    ctx2.fillRect(0, 0, cnv2.width, cnv2.height);
-    var imd1 = ctx2.getImageData(0, 0, cnv2.width, cnv2.height);
-    var w = imd.width * 4;
-
-    for (var i = 0, j, x, y, d = imd.data, d1 = imd1.data, l = d.length; i < l; i += 4) {
-        y = Math.floor(i / w);
-        x = i - w * y;
-        j =  ( y + Math.floor( 10 * Math.sin(.01 * x) ) ) * w + x;
-        d1[j] = d[i];
-        d1[j + 1] = d[i + 1];
-        d1[j + 2] = d[i + 2];
-        d1[j + 3] = d[i + 3];
+    if (radius > centerX || radius > centerY) {
+        out[0] = x;
+        out[1] = y;
+        return;
     }
+    transformInverseCentered(xCentered, yCentered, out, radius, cycle,
+        factor);
+    out[0] += centerX;
+    out[1] += centerY;
+}
 
-    ctx2.putImageData(imd1, 0, 0);
+function transformInverseCentered(x, y, out, radius, cycle, factor) {
+    var offset = Math.sin(radius / cycle * Math.PI * 2) * factor;
+    var angleOld = Math.acos(x / radius);
+    if (y < 0) {
+        angleOld = 2 * Math.PI - angleOld;
+    }
+    var angleNew = angleOld + offset * 1.0 / radius;
+    out[0] = Math.round(Math.cos(angleNew) * radius);
+    out[1] = Math.round(Math.sin(angleNew) * radius);
+}
+
+addEventListener('load', function () {
+    var img1 = new Image();
+    img1.src = "/image?token=111";
+    img1.addEventListener('load', eventLoaded, false);
+    function eventLoaded() {
+        var cnv = document.getElementById('q');
+        var ctx = cnv.getContext('2d');
+        ctx.drawImage(img1, 0, 0);
+        var lastX = -1;
+        var lastY = -1;
+        var diffRange = 10;
+        var level = 0;
+        var imageData = ctx.getImageData(0, 0, 180, 319);
+        var calc = function (ev) {
+            //prevent change too frequent
+            if (Math.abs(ev.clientY - lastY) < diffRange) {
+                return;
+            }
+            var changed = ev.clientY - lastY;
+            lastY = ev.clientY;
+            level += changed / 2.0;
+            var width = 180;
+            var height = 319;
+            var imageDataNew = ctx.createImageData(width, height);
+            for (var i = 0; i < imageData.data.length; i += 4) {
+                var x = i / 4 % width;
+                var y = i / 4 / width;
+                var out = []
+                transformInverse(x, y, out, width, height, level)
+                var number = Math.round((out[0] + Math.round(out[1]) * width) * 4);
+                imageDataNew.data[number] = imageData.data[i]
+                imageDataNew.data[number + 1] = imageData.data[i + 1]
+                imageDataNew.data[number + 2] = imageData.data[i + 2]
+                imageDataNew.data[number + 3] = imageData.data[i + 3]
+            }
+            for (var i = 0; i < imageDataNew.data.length; i += 4) {
+                if (imageDataNew.data[i] == 0) {
+                    imageDataNew.data[i] = imageDataNew.data[i - 4]
+                    imageDataNew.data[i + 1] = imageDataNew.data[i - 3]
+                    imageDataNew.data[i + 2] = imageDataNew.data[i - 2]
+                    imageDataNew.data[i + 3] = imageDataNew.data[i - 1]
+                }
+            }
+            console.log(level);
+            ctx.putImageData(imageDataNew, 0, 0);
+        }
+        cnv.addEventListener('mousedown', function (ev) {
+            cnv.addEventListener('mousemove', calc);
+            this.style.cursor = 'crosshair';
+            lastY = ev.clientY;
+        });
+        cnv.addEventListener('mouseup', function (ev) {
+            cnv.removeEventListener('mousemove', calc);
+            this.style.cursor = 'normal'
+        });
+
+    }
 });
+
