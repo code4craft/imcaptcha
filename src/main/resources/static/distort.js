@@ -35,24 +35,39 @@ addEventListener('load', function () {
     img1.src = "/image?token=111";
     img1.addEventListener('load', eventLoaded, false);
     function eventLoaded() {
+        var width = img1.width;
+        var height = img1.height;
         var cnv = document.getElementById('q');
         var ctx = cnv.getContext('2d');
+        var buttonWidth = 50;
+        var buttonHeight = 50;
+        cnv.width = img1.width;
+        cnv.height = img1.height + buttonHeight;
         ctx.drawImage(img1, 0, 0);
+        ctx.fillStyle = '#d2691e';
+        ctx.fillRect(0, height, buttonWidth, buttonHeight);
+        ctx.fillStyle = '#fff8dc';
+        ctx.font = 'italic bold 25px sans-serif';
+        ctx.textBaseline = 'top';
+        ctx.fillText('拖我', 0, height);
         var lastX = -1;
         var lastY = -1;
-        var diffRange = 10;
+        var responseRange = 10;
         var level = 0;
-        var imageData = ctx.getImageData(0, 0, 180, 319);
+        var levelMin = 50;
+        var levelMax = 150;
+        var levelRange = levelMax;
+        var imageData = ctx.getImageData(0, 0, width, height);
+        var canvasWidth = 300;
         var calc = function (ev) {
             //prevent change too frequent
-            if (Math.abs(ev.clientY - lastY) < diffRange) {
+            if (Math.abs(ev.clientX - lastX) + Math.abs(ev.clientY - lastY) < responseRange) {
                 return;
             }
-            var changed = ev.clientY - lastY;
+            var changed = ev.clientX - lastX + ev.clientY - lastY;
+            lastX = ev.clientX;
             lastY = ev.clientY;
             level += changed / 2.0;
-            var width = 180;
-            var height = 319;
             var imageDataNew = ctx.createImageData(width, height);
             for (var i = 0; i < imageData.data.length; i += 4) {
                 var x = i / 4 % width;
@@ -73,12 +88,20 @@ addEventListener('load', function () {
                     imageDataNew.data[i + 3] = imageDataNew.data[i - 1]
                 }
             }
+            ctx.clearRect(0, height, canvasWidth, buttonHeight);
+            ctx.fillStyle = '#d2691e';
+            ctx.fillRect(0, height, buttonWidth + level / levelRange * (width - buttonWidth), buttonHeight);
+            ctx.fillStyle = '#fff8dc';
+            ctx.font = 'italic bold 25px sans-serif';
+            ctx.textBaseline = 'top';
+            ctx.fillText('拖我', 0, height);
             console.log(level);
             ctx.putImageData(imageDataNew, 0, 0);
         }
         cnv.addEventListener('mousedown', function (ev) {
             cnv.addEventListener('mousemove', calc);
             this.style.cursor = 'crosshair';
+            lastX = ev.clientX;
             lastY = ev.clientY;
         });
         cnv.addEventListener('mouseup', function (ev) {

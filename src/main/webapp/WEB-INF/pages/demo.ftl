@@ -106,7 +106,7 @@
 
                 <div class="form-block" id="ctl00_PlaceHolderPage_divCapchaCode">
                     <span class="label">验证码：</span>
-                    <div><canvas id="q" width="140" height="300"></canvas></div>
+                    <div><canvas id="q" width="300" height="350"></canvas></div>
                     <span class="form-msg-box mb-error fv_validate Hide" id="J_fv-validate"></span>
                 </div>
 
