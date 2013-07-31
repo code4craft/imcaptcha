@@ -26,5 +26,8 @@
        		<action name="testImage" class="com.dianping.imcaptcha.action.TestImageAction">
        			<result name="error" type="json"></result>
        		</action>
+            <action name="demo" class="com.dianping.imcaptcha.action.DemoAction">
+                <result name="success" type="freemarker">/WEB-INF/pages/demo.ftl</result>
+            </action>
        </package>
 </struts>

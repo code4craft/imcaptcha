@@ -7,7 +7,9 @@
        <!--
             use in develop environment
       -->
-       <constant name="struts.devMode" value="false" />
+    <constant name="struts.serve.static" value="true" />
+
+    <constant name="struts.devMode" value="false" />
        <constant name="struts.enable.DynamicMethodInvocation" value="false" />
        <constant name="struts.ognl.allowStaticMethodAccess" value="true" />
        <constant name="struts.objectFactory"

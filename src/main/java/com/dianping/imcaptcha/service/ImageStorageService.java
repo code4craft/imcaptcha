@@ -1,5 +1,10 @@
 package com.dianping.imcaptcha.service;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -7,20 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
-
 /**
  * @author yihua.huang@dianping.com
  * @date 2013-1-17
  */
 @Component
 public class ImageStorageService implements InitializingBean {
-	private String rawPath = "/Users/cairne/imcaptcha/raw";
-	private String modifiedPath = "/Users/cairne/imcaptcha/modified";
+	private String rawPath = "/data/imcaptcha/raw";
+	private String modifiedPath = "/data/imcaptcha/modified";
 	private List<File> rawFiles = new ArrayList<File>();
 	private List<File> modifiedFiles = new ArrayList<File>();
 	private AtomicInteger atomicInteger = new AtomicInteger();
