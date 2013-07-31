@@ -32,7 +32,9 @@ function transformInverseCentered(x, y, out, radius, cycle, factor) {
 
 addEventListener('load', function () {
     var img1 = new Image();
-    img1.src = "/image?token=111";
+    var answer = Math.round(Math.random() * 100);
+    console.log("answer is "+answer)
+    img1.src = "/testImage?token=111&answer="+answer;
     img1.addEventListener('load', eventLoaded, false);
     function eventLoaded() {
         var width = img1.width;
@@ -107,6 +109,27 @@ addEventListener('load', function () {
         cnv.addEventListener('mouseup', function (ev) {
             cnv.removeEventListener('mousemove', calc);
             this.style.cursor = 'normal'
+            if (Math.abs(answer - level)/level < 0.08 || Math.abs(answer - level) < 5) {
+                ctx.clearRect(0, height, canvasWidth, buttonHeight);
+                ctx.fillStyle = '#7cfc00';
+                ctx.fillRect(0, height, buttonWidth + level / levelRange * (width - buttonWidth), buttonHeight);
+                ctx.fillStyle = '#fff8dc';
+                ctx.font = 'italic bold 25px sans-serif';
+                ctx.textBaseline = 'top';
+                ctx.fillText('搞定！', 0, height);
+                var div = document.getElementById("captcha-tip");
+                div.style.display="block"
+                console.log(level);
+            } else {
+                ctx.clearRect(0, height, canvasWidth, buttonHeight);
+                ctx.fillStyle = '#d2691e';
+                ctx.fillRect(0, height, buttonWidth + level / levelRange * (width - buttonWidth), buttonHeight);
+                ctx.fillStyle = '#fff8dc';
+                ctx.font = 'italic bold 25px sans-serif';
+                ctx.textBaseline = 'top';
+                ctx.fillText('拖我', 0, height);
+                console.log(level);
+            }
         });
 
     }
