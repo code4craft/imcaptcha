@@ -106,7 +106,9 @@
 
                 <div class="form-block" id="ctl00_PlaceHolderPage_divCapchaCode">
                     <span class="label">验证码：</span>
-                    <div><canvas id="q" width="300" height="350"></canvas><span class="label" id="captcha-tip" style="display: none">该图片来自<a href="http://www.dianping.com/shop/4989634">江边城外烤全鱼</a></div></div>
+                    <div><canvas id="q" width="300" height="350"></canvas>
+                        <span class="label" id="captcha-tip" style="display: none">该图片来自<a href="http://www.dianping.com/shop/4989634" target="_blank">江边城外烤全鱼</a>
+                            由<a href="http://www.dianping.com/member/1" target="_blank">九指</a>上传</div></div>
 
                     <span class="form-msg-box mb-error fv_validate Hide" id="J_fv-validate"></span>
                 </div>
