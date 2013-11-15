@@ -183,5 +183,9 @@ token为空返回json {"code":403}</p>
 			 <p>&lt;type&gt;jar&lt;/type&gt;</p>
 			 <p>&lt;scope&gt;compile&lt;/scope&gt;</p>
 		 <p>&lt;/dependency&gt;</p>
+
+<h3>4.demo：</h3>
+
+<p>url:<a href="/demo">/demo</a>
 </body>
 </html>

@@ -9,9 +9,18 @@ import com.opensymphony.xwork2.ActionSupport;
  */
 public class DemoAction extends ActionSupport {
 
+    private int id;
+
 	@Override
 	public String execute() throws Exception {
 		return "success";
 	}
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -10,6 +10,7 @@
 <html class="G_N">
 <head>
     <meta charset="UTF-8"/><title>大众点评网</title>
+    <script>alert('${id}')</script>
     <script>document.documentElement.className=location.hash?'J_H':'';var G_rtop=+new Date,_gaq=[
         ['_setAccount','UA-464026-1'],
         ['_addOrganic','soso','w'],

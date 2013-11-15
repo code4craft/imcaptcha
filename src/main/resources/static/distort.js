@@ -54,7 +54,7 @@ addEventListener('load', function () {
         ctx.fillText('拖我', 0, height);
         var lastX = -1;
         var lastY = -1;
-        var responseRange = 10;
+        var responseRange = 25;
         var level = 0;
         var levelMin = 50;
         var levelMax = 150;
@@ -109,7 +109,7 @@ addEventListener('load', function () {
         cnv.addEventListener('mouseup', function (ev) {
             cnv.removeEventListener('mousemove', calc);
             this.style.cursor = 'normal'
-            if (Math.abs(answer - level)/level < 0.08 || Math.abs(answer - level) < 5) {
+            if (Math.abs(answer - level)/level < 0.15 || Math.abs(answer - level) < 10) {
                 ctx.clearRect(0, height, canvasWidth, buttonHeight);
                 ctx.fillStyle = '#7cfc00';
                 ctx.fillRect(0, height, buttonWidth + level / levelRange * (width - buttonWidth), buttonHeight);
